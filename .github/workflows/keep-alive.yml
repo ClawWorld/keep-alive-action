@@ -1,0 +1,60 @@
+name: Keep Vercel Alive
+
+on:
+  schedule:
+    # 每 5 分钟运行一次
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # 手动触发
+  push:
+    branches: [ main ]
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Keep Vercel alive
+        run: node keep-alive.js
+        env:
+          NODE_ENV: production
+      
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: keep-alive-logs
+          path: logs/
+          retention-days: 7
+      
+      - name: Send notification on failure
+        if: failure()
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const logDir = './logs';
+            let logContent = '';
+            
+            if (fs.existsSync(logDir)) {
+              const files = fs.readdirSync(logDir);
+              if (files.length > 0) {
+                const latestLog = files.sort().reverse()[0];
+                logContent = fs.readFileSync(`${logDir}/${latestLog}`, 'utf8');
+              }
+            }
+            
+            // 这里可以添加通知逻辑，比如发送邮件或消息
+            console.log('Keep-alive job failed!');
+            console.log('Log content:', logContent);
