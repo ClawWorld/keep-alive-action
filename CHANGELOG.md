@@ -7,9 +7,11 @@
 - **状态文件**：创建 `status.json` 文件记录网站状态
 - **状态检查命令**：添加 `npm run status` 命令
 - **改进的 GitHub Actions**：使用最新的 Actions 版本
+- **v2 版本**：创建 `keep-alive-v2.js`，包含更多改进
 
 ### 🔧 修复问题
 - **GitHub Actions 错误**：修复 `actions/upload-artifact: v3` 已弃用的问题
+- **文件读取错误**：修复 `logs/stats.json` 文件不存在导致的错误
 - **升级 Actions 版本**：
   - `actions/checkout@v3` → `actions/checkout@v4`
   - `actions/setup-node@v3` → `actions/setup-node@v4`
@@ -20,11 +22,14 @@
 - **状态文件上传**：上传 `test-results.json` 文件
 - **状态徽章**：添加状态文件生成
 - **错误处理**：改进错误处理和通知机制
+- **文件存在性检查**：添加文件存在性检查，防止错误
+- **统计信息增强**：保存最近的结果和详细统计
 
 ### 📝 文档更新
 - **更新日志**：创建 CHANGELOG.md 文件
 - **快速开始**：更新 QUICK_START.md 文档
 - **设置指南**：更新 SETUP.md 文档
+- **修复说明**：创建 修复说明.md 文件
 
 ## v1.0.0 (2026-02-11)
 

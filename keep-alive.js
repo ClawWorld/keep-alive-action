@@ -223,6 +223,10 @@ async function main() {
             }
         }
         
+        // 计算本次运行的成功次数
+        const successful = results.filter(r => r.success).length;
+        const total = results.length;
+        
         // 更新统计信息
         stats.lastRun = new Date().toISOString();
         stats.totalRuns += 1;
@@ -235,6 +239,7 @@ async function main() {
         log(`📊 总计运行次数: ${stats.totalRuns}`);
         log(`📊 总计成功次数: ${stats.totalSuccess}`);
         log(`📊 总计失败次数: ${stats.totalFailed}`);
+        log(`📊 成功率: ${((stats.totalSuccess / stats.totalRuns) * 100).toFixed(1)}%`);
         
     } catch (error) {
         log(`❌ 严重错误: ${error.message}`, 'error');
