@@ -61,7 +61,7 @@ keep-alive-action/
 - `websites`: 网站数组，每个网站是一个对象
 - `name`: 网站名称（可选）
 - `url`: Vercel 网站地址
-- `checkInterval`: 检查间隔（分钟），默认 5 分钟
+- `checkInterval`: 检查间隔（分钟），默认 10 分钟
 - `timeout`: 请求超时时间（毫秒），默认 10 秒
 - `maxRetries`: 最大重试次数，默认 3 次
 - `userAgent`: 浏览器标识，模拟真实浏览器访问
@@ -133,7 +133,7 @@ keep-alive-action/
 | 参数 | 类型 | 默认值 | 说明 |
 |------|------|--------|------|
 | `websiteUrl` | string | - | Vercel 网站地址 |
-| `checkInterval` | number | 5 | 检查间隔（分钟） |
+| `checkInterval` | number | 10 | 检查间隔（分钟） |
 | `timeout` | number | 10000 | 请求超时时间（毫秒） |
 | `maxRetries` | number | 3 | 最大重试次数 |
 
