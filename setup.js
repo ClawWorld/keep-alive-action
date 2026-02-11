@@ -26,21 +26,43 @@ try {
     process.exit(1);
 }
 
+// 如果配置是旧格式，转换为新格式
+if (currentConfig.websiteUrl) {
+    console.log('⚠️ 检测到旧格式配置，正在转换为新格式...');
+    currentConfig = {
+        websites: [
+            {
+                name: 'website-1',
+                url: currentConfig.websiteUrl,
+                checkInterval: currentConfig.checkInterval || 5,
+                timeout: currentConfig.timeout || 10000,
+                maxRetries: currentConfig.maxRetries || 3,
+                userAgent: currentConfig.userAgent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+            }
+        ],
+        global: {
+            checkInterval: currentConfig.checkInterval || 5,
+            timeout: currentConfig.timeout || 10000,
+            maxRetries: currentConfig.maxRetries || 3,
+            userAgent: currentConfig.userAgent || 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+    };
+    console.log('✅ 配置转换完成');
+}
+
 console.log('🔧 Vercel 保持激活工具 - 设置向导');
 console.log('==================================\n');
 
 // 问题列表
 const questions = [
     {
-        name: 'websiteUrl',
-        question: '请输入你的 Vercel 网站地址 (例如: https://your-project.vercel.app): ',
-        default: currentConfig.websiteUrl,
+        name: 'websiteCount',
+        question: '请输入要监控的网站数量 (建议 1-5): ',
+        default: currentConfig.websites ? currentConfig.websites.length : 1,
         validate: (value) => {
-            if (!value || value === 'https://your-project.vercel.app') {
-                return '请输入有效的 Vercel 网站地址';
-            }
-            if (!value.startsWith('http://') && !value.startsWith('https://')) {
-                return '网址必须以 http:// 或 https:// 开头';
+            const num = parseInt(value);
+            if (isNaN(num) || num < 1 || num > 10) {
+                return '请输入 1-10 之间的数字';
             }
             return true;
         }
@@ -48,7 +70,7 @@ const questions = [
     {
         name: 'checkInterval',
         question: '请输入检查间隔 (分钟，建议 5-15 分钟): ',
-        default: currentConfig.checkInterval,
+        default: currentConfig.global ? currentConfig.global.checkInterval : 5,
         validate: (value) => {
             const num = parseInt(value);
             if (isNaN(num) || num < 1 || num > 60) {
@@ -60,7 +82,7 @@ const questions = [
     {
         name: 'timeout',
         question: '请输入请求超时时间 (毫秒，建议 10000): ',
-        default: currentConfig.timeout,
+        default: currentConfig.global ? currentConfig.global.timeout : 10000,
         validate: (value) => {
             const num = parseInt(value);
             if (isNaN(num) || num < 1000 || num > 30000) {
@@ -72,7 +94,7 @@ const questions = [
     {
         name: 'maxRetries',
         question: '请输入最大重试次数 (建议 3): ',
-        default: currentConfig.maxRetries,
+        default: currentConfig.global ? currentConfig.global.maxRetries : 3,
         validate: (value) => {
             const num = parseInt(value);
             if (isNaN(num) || num < 1 || num > 10) {
@@ -123,13 +145,15 @@ function saveConfig() {
     console.log('\n==================================');
     console.log('正在保存配置...\n');
     
-    // 转换数据类型
+    // 创建配置对象
     const config = {
-        websiteUrl: answers.websiteUrl,
-        checkInterval: parseInt(answers.checkInterval),
-        timeout: parseInt(answers.timeout),
-        maxRetries: parseInt(answers.maxRetries),
-        userAgent: currentConfig.userAgent
+        websites: [],
+        global: {
+            checkInterval: parseInt(answers.checkInterval),
+            timeout: parseInt(answers.timeout),
+            maxRetries: parseInt(answers.maxRetries),
+            userAgent: currentConfig.global ? currentConfig.global.userAgent : 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
     };
     
     // 写入配置文件
@@ -141,11 +165,12 @@ function saveConfig() {
         console.log('\n==================================');
         console.log('🎉 配置完成！\n');
         console.log('下一步操作:');
-        console.log('1. 测试配置: npm test');
-        console.log('2. 创建 GitHub 仓库');
-        console.log('3. 推送代码到 GitHub');
-        console.log('4. 在 GitHub 中启用 Actions');
-        console.log('5. 等待定时任务运行');
+        console.log('1. 添加网站配置: 编辑 config.json');
+        console.log('2. 测试配置: npm test');
+        console.log('3. 创建 GitHub 仓库');
+        console.log('4. 推送代码到 GitHub');
+        console.log('5. 在 GitHub 中启用 Actions');
+        console.log('6. 等待定时任务运行');
         console.log('\n详细说明请查看 README.md');
     } catch (error) {
         console.error('❌ 保存配置失败:', error.message);

@@ -37,15 +37,66 @@ keep-alive-action/
 
 ```json
 {
-  "websiteUrl": "https://your-project.vercel.app",
-  "checkInterval": 5,
-  "timeout": 10000,
-  "maxRetries": 3,
-  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+  "websites": [
+    {
+      "name": "fitness-website",
+      "url": "https://fitness-pink-pi.vercel.app",
+      "checkInterval": 5,
+      "timeout": 10000,
+      "maxRetries": 3,
+      "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+    }
+  ],
+  "global": {
+    "checkInterval": 5,
+    "timeout": 10000,
+    "maxRetries": 3,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+  }
 }
 ```
 
-### 2. 部署到 GitHub
+### 2. 配置说明
+
+**参数说明**：
+- `websites`: 网站数组，每个网站是一个对象
+- `name`: 网站名称（可选）
+- `url`: Vercel 网站地址
+- `checkInterval`: 检查间隔（分钟），默认 5 分钟
+- `timeout`: 请求超时时间（毫秒），默认 10 秒
+- `maxRetries`: 最大重试次数，默认 3 次
+- `userAgent`: 浏览器标识，模拟真实浏览器访问
+- `global`: 全局配置，如果网站没有指定配置，会使用全局配置
+
+**添加多个网站**：
+```json
+{
+  "websites": [
+    {
+      "name": "fitness-website",
+      "url": "https://fitness-pink-pi.vercel.app",
+      "checkInterval": 5,
+      "timeout": 10000,
+      "maxRetries": 3
+    },
+    {
+      "name": "another-website",
+      "url": "https://another-site.vercel.app",
+      "checkInterval": 10,
+      "timeout": 15000,
+      "maxRetries": 5
+    }
+  ],
+  "global": {
+    "checkInterval": 5,
+    "timeout": 10000,
+    "maxRetries": 3,
+    "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
+  }
+}
+```
+
+### 3. 部署到 GitHub
 
 1. **创建 GitHub 仓库**
    ```bash

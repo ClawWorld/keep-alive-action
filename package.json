@@ -1,6 +1,6 @@
 {
   "name": "vercel-keep-alive",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "定时访问 Vercel 网站，防止网站休眠",
   "main": "keep-alive.js",
   "scripts": {
@@ -15,7 +15,8 @@
     "vercel",
     "keep-alive",
     "github-actions",
-    "monitoring"
+    "monitoring",
+    "multi-website"
   ],
   "author": "Claw Fitness Coach",
   "license": "MIT",
