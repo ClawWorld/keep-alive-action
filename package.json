@@ -5,7 +5,6 @@
   "main": "keep-alive.js",
   "scripts": {
     "start": "node keep-alive.js",
-    "start:v2": "node keep-alive-v2.js",
     "test": "node test.js",
     "dev": "node keep-alive.js",
     "setup": "node setup.js",

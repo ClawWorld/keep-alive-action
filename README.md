@@ -12,8 +12,7 @@ Vercel 的免费计划会在一段时间没有访问后进入休眠状态，再�
 keep-alive-action/
 ├── .github/
 │   └── workflows/
-│       ├── keep-alive.yml    # GitHub Actions 配置 (v1)
-│       └── keep-alive-v2.yml # GitHub Actions 配置 (v2)
+│       └── keep-alive.yml    # GitHub Actions 配置
 ├── keep-alive.js             # 主访问脚本
 ├── test.js                   # 测试脚本
 ├── setup.js                  # 设置向导
