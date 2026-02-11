@@ -7,7 +7,8 @@
     "start": "node keep-alive.js",
     "test": "node test.js",
     "dev": "node keep-alive.js",
-    "setup": "node setup.js"
+    "setup": "node setup.js",
+    "status": "node status-monitor.js"
   },
   "keywords": [
     "vercel",
