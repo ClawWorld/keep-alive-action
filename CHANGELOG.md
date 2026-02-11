@@ -1,0 +1,140 @@
+# Vercel 保持激活工具 - 更新日志
+
+## v1.1.0 (2026-02-11)
+
+### ✨ 新增功能
+- **状态监控**：添加 `status-monitor.js` 脚本，可以检查网站状态
+- **状态文件**：创建 `status.json` 文件记录网站状态
+- **状态检查命令**：添加 `npm run status` 命令
+- **改进的 GitHub Actions**：使用最新的 Actions 版本
+
+### 🔧 修复问题
+- **GitHub Actions 错误**：修复 `actions/upload-artifact: v3` 已弃用的问题
+- **升级 Actions 版本**：
+  - `actions/checkout@v3` → `actions/checkout@v4`
+  - `actions/setup-node@v3` → `actions/setup-node@v4`
+  - `actions/github-script@v6` → `actions/github-script@v7`
+
+### 📊 改进功能
+- **日志上传优化**：添加压缩级别，减少存储空间
+- **状态文件上传**：上传 `test-results.json` 文件
+- **状态徽章**：添加状态文件生成
+- **错误处理**：改进错误处理和通知机制
+
+### 📝 文档更新
+- **更新日志**：创建 CHANGELOG.md 文件
+- **快速开始**：更新 QUICK_START.md 文档
+- **设置指南**：更新 SETUP.md 文档
+
+## v1.0.0 (2026-02-11)
+
+### 🎉 初始版本
+
+#### 核心功能
+- **定时访问**：每 5 分钟访问一次 Vercel 网站
+- **多页面访问**：访问根路径、启动页面、主界面
+- **详细日志**：记录访问时间、状态码、响应时间
+- **错误处理**：自动重试机制，最多重试 3 次
+- **统计信息**：成功率、平均响应时间等
+
+#### 配置选项
+- **websiteUrl**：Vercel 网站地址
+- **checkInterval**：检查间隔（分钟）
+- **timeout**：请求超时时间（毫秒）
+- **maxRetries**：最大重试次数
+
+#### GitHub Actions
+- **定时触发**：每 5 分钟运行一次
+- **手动触发**：支持手动运行
+- **推送触发**：代码推送时运行
+- **日志上传**：自动上传日志文件
+
+#### 脚本工具
+- **keep-alive.js**：主访问脚本
+- **test.js**：测试脚本
+- **setup.js**：设置向导
+- **status-monitor.js**：状态监控脚本
+
+#### 文档
+- **README.md**：详细说明文档
+- **SETUP.md**：详细设置指南
+- **QUICK_START.md**：快速开始指南
+- **项目总结.md**：项目总结
+
+## 📋 版本说明
+
+### 语义化版本
+- **主版本号 (MAJOR)**：不兼容的 API 更改
+- **次版本号 (MINOR)**：向后兼容的功能性新增
+- **修订号 (PATCH)**：向后兼容的问题修正
+
+### 发布周期
+- **快速迭代**：根据用户反馈快速更新
+- **稳定版本**：每个版本都经过充分测试
+- **向后兼容**：尽量保持配置兼容性
+
+## 🚀 升级指南
+
+### 从 v1.0.0 升级到 v1.1.0
+
+1. **更新代码**
+   ```bash
+   git pull origin main
+   ```
+
+2. **重新部署**
+   ```bash
+   # 测试新功能
+   npm test
+   npm run status
+   
+   # 推送到 GitHub
+   git add .
+   git commit -m "Update to v1.1.0"
+   git push origin main
+   ```
+
+3. **检查 GitHub Actions**
+   - 确保 Actions 正常运行
+   - 查看新的状态监控功能
+
+## 🐛 已知问题
+
+### v1.0.0
+- **GitHub Actions 错误**：使用已弃用的 `actions/upload-artifact: v3`
+- **解决方案**：升级到 v1.1.0
+
+### v1.1.0
+- **无已知问题**
+
+## 🔮 未来计划
+
+### 短期计划
+- **多网站支持**：支持同时监控多个 Vercel 网站
+- **通知系统**：添加邮件、Slack、Discord 通知
+- **性能优化**：减少 GitHub Actions 运行时间
+
+### 长期计划
+- **Web 界面**：创建 Web 界面查看状态
+- **数据分析**：分析网站访问模式
+- **智能调度**：根据网站使用情况调整频率
+
+## 📞 获取帮助
+
+如果遇到问题：
+1. 查看 GitHub Actions 日志
+2. 检查 `config.json` 配置
+3. 确认网站地址正确
+4. 手动测试访问网站
+5. 查看 README.md 和 SETUP.md
+
+## 🎉 总结
+
+这个工具可以帮助你：
+1. ✅ 保持 Vercel 网站一直激活
+2. ✅ 避免网站休眠导致的延迟
+3. ✅ 免费使用 GitHub Actions
+4. ✅ 详细的日志和统计信息
+5. ✅ 支持手动触发和自动触发
+
+**现在就开始使用吧！💪**

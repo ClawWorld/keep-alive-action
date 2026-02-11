@@ -1,0 +1,97 @@
+name: Keep Vercel Alive (v2)
+
+on:
+  schedule:
+    # 每 5 分钟运行一次
+    - cron: '*/5 * * * *'
+  workflow_dispatch:  # 手动触发
+  push:
+    branches: [ main ]
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Keep Vercel alive
+        run: node keep-alive.js
+        env:
+          NODE_ENV: production
+      
+      - name: Upload logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: keep-alive-logs-${{ github.run_number }}
+          path: logs/
+          retention-days: 7
+          compression-level: 6
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-${{ github.run_number }}
+          path: test-results.json
+          retention-days: 7
+          compression-level: 6
+      
+      - name: Send notification on failure
+        if: failure()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const logDir = './logs';
+            let logContent = '';
+            
+            if (fs.existsSync(logDir)) {
+              const files = fs.readdirSync(logDir);
+              if (files.length > 0) {
+                const latestLog = files.sort().reverse()[0];
+                logContent = fs.readFileSync(`${logDir}/${latestLog}`, 'utf8');
+              }
+            }
+            
+            // 发送通知到 Slack 或其他服务
+            console.log('❌ Keep-alive job failed!');
+            console.log('Log content:', logContent);
+            
+            // 可以在这里添加通知逻辑
+            // 例如：发送到 Slack、Discord、邮件等
+      
+      - name: Update status badge
+        if: always()
+        run: |
+          # 创建状态文件
+          STATUS_FILE="status.json"
+          STATUS="success"
+          if [ "${{ job.status }}" != "success" ]; then
+            STATUS="failure"
+          fi
+          
+          cat > $STATUS_FILE << EOF
+          {
+            "status": "$STATUS",
+            "timestamp": "$(date -u +"%Y-%m-%dT%H:%M:%SZ")",
+            "run_number": ${{ github.run_number }},
+            "workflow": "${{ github.workflow }}",
+            "repository": "${{ github.repository }}"
+          }
+          EOF
+          
+          # 上传状态文件
+          echo "Status: $STATUS"
+          cat $STATUS_FILE

@@ -12,11 +12,21 @@ Vercel 的免费计划会在一段时间没有访问后进入休眠状态，再�
 keep-alive-action/
 ├── .github/
 │   └── workflows/
-│       └── keep-alive.yml    # GitHub Actions 配置
-├── keep-alive.js             # 访问脚本
+│       ├── keep-alive.yml    # GitHub Actions 配置 (v1)
+│       └── keep-alive-v2.yml # GitHub Actions 配置 (v2)
+├── keep-alive.js             # 主访问脚本
+├── test.js                   # 测试脚本
+├── setup.js                  # 设置向导
+├── status-monitor.js         # 状态监控脚本
 ├── config.json               # 配置文件
 ├── package.json              # 项目配置
-└── README.md                 # 说明文档
+├── .gitignore               # Git 忽略文件
+├── README.md                 # 说明文档
+├── SETUP.md                 # 设置指南
+├── QUICK_START.md           # 快速开始指南
+├── CHANGELOG.md             # 更新日志
+├── 项目总结.md              # 项目总结
+└── status.json              # 状态文件（运行后生成）
 ```
 
 ## 🚀 使用方法
@@ -30,7 +40,8 @@ keep-alive-action/
   "websiteUrl": "https://your-project.vercel.app",
   "checkInterval": 5,
   "timeout": 10000,
-  "maxRetries": 3
+  "maxRetries": 3,
+  "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36"
 }
 ```
 
