@@ -1,10 +1,11 @@
 {
   "name": "vercel-keep-alive",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "定时访问 Vercel 网站，防止网站休眠",
   "main": "keep-alive.js",
   "scripts": {
     "start": "node keep-alive.js",
+    "start:v2": "node keep-alive-v2.js",
     "test": "node test.js",
     "dev": "node keep-alive.js",
     "setup": "node setup.js",

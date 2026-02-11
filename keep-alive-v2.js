@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 /**
- * Vercel 网站保持激活脚本
+ * Vercel 网站保持激活脚本 (v2)
  * 通过定时访问 Vercel 网站，防止网站因长时间无访问而休眠
  */
 
@@ -177,6 +177,58 @@ function printStats(results) {
     log(`========================\n`);
 }
 
+// 保存统计信息
+function saveStats(results) {
+    const statsFile = path.join(logDir, 'stats.json');
+    let stats = {
+        lastRun: new Date().toISOString(),
+        totalRuns: 0,
+        totalSuccess: 0,
+        totalFailed: 0,
+        lastResults: []
+    };
+    
+    // 如果统计文件存在，读取现有数据
+    if (fs.existsSync(statsFile)) {
+        try {
+            const existingStats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
+            stats = {
+                ...stats,
+                ...existingStats
+            };
+        } catch (error) {
+            log(`⚠️ 无法读取统计文件，使用默认值`, 'warning');
+        }
+    }
+    
+    // 更新统计信息
+    stats.lastRun = new Date().toISOString();
+    stats.totalRuns += 1;
+    
+    const successful = results.filter(r => r.success).length;
+    const total = results.length;
+    
+    stats.totalSuccess += successful;
+    stats.totalFailed += (total - successful);
+    
+    // 保存最近的结果
+    stats.lastResults = results.map(r => ({
+        url: r.url,
+        success: r.success,
+        statusCode: r.statusCode,
+        duration: r.duration,
+        timestamp: r.timestamp
+    }));
+    
+    // 保存统计信息
+    fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
+    
+    log(`📊 总计运行次数: ${stats.totalRuns}`);
+    log(`📊 总计成功次数: ${stats.totalSuccess}`);
+    log(`📊 总计失败次数: ${stats.totalFailed}`);
+    log(`📊 成功率: ${((stats.totalSuccess / stats.totalRuns) * 100).toFixed(1)}%`);
+}
+
 // 主函数
 async function main() {
     log(`🚀 开始保持 Vercel 网站激活`);
@@ -202,39 +254,7 @@ async function main() {
         }
         
         // 保存统计信息
-        const statsFile = path.join(logDir, 'stats.json');
-        let stats = {
-            lastRun: new Date().toISOString(),
-            totalRuns: 0,
-            totalSuccess: 0,
-            totalFailed: 0
-        };
-        
-        // 如果统计文件存在，读取现有数据
-        if (fs.existsSync(statsFile)) {
-            try {
-                const existingStats = JSON.parse(fs.readFileSync(statsFile, 'utf8'));
-                stats = {
-                    ...stats,
-                    ...existingStats
-                };
-            } catch (error) {
-                log(`⚠️ 无法读取统计文件，使用默认值`, 'warning');
-            }
-        }
-        
-        // 更新统计信息
-        stats.lastRun = new Date().toISOString();
-        stats.totalRuns += 1;
-        stats.totalSuccess += successful;
-        stats.totalFailed += (total - successful);
-        
-        // 保存统计信息
-        fs.writeFileSync(statsFile, JSON.stringify(stats, null, 2));
-        
-        log(`📊 总计运行次数: ${stats.totalRuns}`);
-        log(`📊 总计成功次数: ${stats.totalSuccess}`);
-        log(`📊 总计失败次数: ${stats.totalFailed}`);
+        saveStats(results);
         
     } catch (error) {
         log(`❌ 严重错误: ${error.message}`, 'error');

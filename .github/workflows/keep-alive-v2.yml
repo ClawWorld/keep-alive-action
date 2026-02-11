@@ -26,7 +26,7 @@ jobs:
         run: npm install
       
       - name: Keep Vercel alive
-        run: node keep-alive.js
+        run: node keep-alive-v2.js
         env:
           NODE_ENV: production
       
